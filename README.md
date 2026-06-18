@@ -48,7 +48,7 @@ python manage.py runserver
 
 ---
 
-## 3. Project Scope: Done vs. Skipped
+## 3. What's Done vs. Skipped (And Why)
 
 ### What's Done
 * **Full CRUD Capabilities:** Complete workflows to add, view, edit, and delete expenses using robust backend input forms.
@@ -61,16 +61,14 @@ python manage.py runserver
 
 ---
 
-## 4. Handled Edge Cases & Known Rough Edges
-
-### Edge Cases Handled
-* **Empty States:** If a filter yields zero results or the database is entirely brand new, the UI automatically replaces the table with an explicit message rather than rendering an empty grid or breaking.
-* **Asymmetric Date Filters:** The filter logic handles partial data safely; applying a "From" date without a "To" date filters sequentially from that point forward without crashing.
-* **Data Type Integrity:** Django's `DecimalField` and form-cleansing rules instantly block negative values, invalid characters, or missing fields.
+## 4. Known Rough Edges & Handled Edge Cases
 
 ### Known Rough Edges
 * **CDN Dependency:** The frontend UI relies on an active internet connection to load Tailwind CSS via CDN. In a production environment, Tailwind would be compiled locally.
 * **Pagination Constraints:** The ledger table displays all expenses on a single page. If a user inputs thousands of entries, this could cause visual browser lag—an issue easily solved in production using Django's built-in `Paginator`.
 * **Hardcoded Currency Symbols:** The Indian Rupee currency token (₹) is typed directly into the templates. A true production app would utilize Django's localization utilities (`django.utils.formats`) to adjust formatting dynamically based on client machine locales.
 
----
+### Edge Cases Handled
+* **Empty States:** If a filter yields zero results or the database is entirely brand new, the UI automatically replaces the table with an explicit message rather than rendering an empty grid or breaking.
+* **Asymmetric Date Filters:** The filter logic handles partial data safely; applying a "From" date without a "To" date filters sequentially from that point forward without crashing.
+* **Data Type Integrity:** Django's `DecimalField` and form-cleansing rules instantly block negative values, invalid characters, or missing fields.
