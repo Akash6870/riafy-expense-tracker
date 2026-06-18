@@ -11,7 +11,7 @@ A lightweight, robust personal expense management application built using Python
 Execute the following commands in sequence inside your project root directory:
 
 ```bash
-# 1. Setup virtual environment
+## 1. Setup virtual environment
 python -m venv venv
 
 # Activate on Windows:
@@ -32,9 +32,9 @@ python manage.py runserver
 ## 2. Stack Choices & Tradeoffs
 
 ### Backend: Django (Python)
-*Choice: Python with Django.
-*Why: Django operates on a "batteries-included" philosophy. Its built-in Object-Relational Mapper (ORM) and automated form validation (`ModelForm`) eliminate the need to write raw SQL or custom input sanitization manually.
-*Tradeoff: It carries more structural overhead than a micro-framework like Flask or FastAPI, but it maximizes speed and security within a strict 2-hour timeline.
+* Choice: Python with Django.
+* Why: Django operates on a "batteries-included" philosophy. Its built-in Object-Relational Mapper (ORM) and automated form validation (`ModelForm`) eliminate the need to write raw SQL or custom input sanitization manually.
+* Tradeoff: It carries more structural overhead than a micro-framework like Flask or FastAPI, but it maximizes speed and security within a strict 2-hour timeline.
 
 ### Frontend: HTML5 + Tailwind CSS (via CDN)
 * Choice: Server-rendered Django templates styled with the Tailwind CSS browser script.
