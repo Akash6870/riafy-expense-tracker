@@ -71,4 +71,4 @@ python manage.py runserver
 ### Edge Cases Handled
 * **Empty States:** If a filter yields zero results or the database is entirely brand new, the UI automatically replaces the table with an explicit message rather than rendering an empty grid or breaking.
 * **Asymmetric Date Filters:** The filter logic handles partial data safely; applying a "From" date without a "To" date filters sequentially from that point forward without crashing.
-* **Data Type Integrity:** Django's `DecimalField` and form-cleansing rules instantly block negative values, invalid characters, or missing fields.
+* Data Type Integrity: Django's `DecimalField` and form-cleansing rules instantly block negative values, invalid characters, or missing fields.
