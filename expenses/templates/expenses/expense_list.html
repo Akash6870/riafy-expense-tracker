@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-6xl mx-auto p-6">
+        
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-blue-600">Expense Tracker</h1>
+            <a href="{% url 'expense_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition">
+                + Add New Expense
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-sm font-medium text-gray-500 uppercase">Spent in {{ current_month_name }}</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">₹{{ total_spent|floatformat:2 }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2">
+                <h3 class="text-sm font-medium text-gray-500 uppercase mb-3">Category Breakdown</h3>
+                <div class="flex flex-wrap gap-3">
+                    {% for item in category_breakdown %}
+                        <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-semibold">
+                            {{ item.category }}: ₹{{ item.total|floatformat:2 }}
+                        </span>
+                    {% empty %}
+                        <p class="text-gray-400 text-sm">No recorded data for this month.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <form method="GET" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
+            <div>
+                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Search Keyword</label>
+                <input type="text" name="search" value="{{ request.GET.search }}" placeholder="e.g. Starbucks" class="w-full text-sm border-gray-200 border p-2 rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Category</label>
+                <select name="category" class="w-full text-sm border-gray-200 border p-2 rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="">All Categories</option>
+                    {% for cat_val, cat_lbl in categories %}
+                        <option value="{{ cat_val }}" {% if request.GET.category == cat_val %}selected{% endif %}>{{ cat_lbl }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Date Scope (From / To)</label>
+                <div class="flex gap-1">
+                    <input type="date" name="date_from" value="{{ request.GET.date_from }}" class="w-1/2 text-xs border-gray-200 border p-1.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="date" name="date_to" value="{{ request.GET.date_to }}" class="w-1/2 text-xs border-gray-200 border p-1.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-2 px-3 rounded-md transition cursor-pointer">Apply Filter</button>
+                <a href="{% url 'expense_list' %}" class="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-3 rounded-md transition">Reset</a>
+            </div>
+        </form>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-100 text-xs font-semibold uppercase text-gray-500 tracking-wider">
+                        <th class="py-4 px-6">Date</th>
+                        <th class="py-4 px-6">Title</th>
+                        <th class="py-4 px-6">Category</th>
+                        <th class="py-4 px-6">Amount</th>
+                        <th class="py-4 px-6">Note</th>
+                        <th class="py-4 px-6 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm">
+                    {% for expense in expenses %}
+                        <tr class="hover:bg-gray-50/70 transition">
+                            <td class="py-4 px-6 font-medium text-gray-600 whitespace-nowrap">{{ expense.date|date:"Y-m-d" }}</td>
+                            <td class="py-4 px-6 font-bold text-gray-900">{{ expense.title }}</td>
+                            <td class="py-4 px-6">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700">{{ expense.category }}</span>
+                            </td>
+                            <td class="py-4 px-6 font-semibold text-gray-900">₹{{ expense.amount }}</td>
+                            <td class="py-4 px-6 text-gray-400 italic max-w-xs truncate">{{ expense.note|default:"—" }}</td>
+                            <td class="py-4 px-6 text-right space-x-3 whitespace-nowrap">
+                                <a href="{% url 'expense_update' expense.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
+                                <a href="{% url 'expense_delete' expense.pk %}" class="text-red-600 hover:text-red-800 font-medium">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-gray-400 bg-gray-50/30">
+                                No records fit the active filter conditions.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>
