@@ -1,3 +1,16 @@
+# Personal Expense Tracker
+
+A lightweight, robust personal expense management application built using Python, Django, and Tailwind CSS.
+
+## Getting Started
+
+### Prerequisites
+- Python 3.8 or higher installed on your local machine.
+
+### Installation & Run Steps
+Execute the following commands in sequence inside your project root directory:
+
+```bash
 # 1. Setup virtual environment
 python -m venv venv
 
